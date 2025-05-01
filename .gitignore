@@ -1,0 +1,12 @@
+﻿# downloaded content
+
+# built content
+bin/
+obj/
+# user-specific files
+.idea/
+*.sln.DotSettings.user
+
+# temp files
+
+# secrets
