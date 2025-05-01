@@ -23,9 +23,6 @@ jobs:
       - name: Install Aspirate
         run: dotnet tool install -g aspirate --prerelease
 
-      - name: Add dotnet tools dir to PATH
-        run: export PATH="$PATH:/home/runner/.dotnet/tools"
-
       - name: Docker Login
         uses: docker/login-action@v3.3.0
         with:
@@ -37,6 +34,7 @@ jobs:
       - name: Generate Kubernetes Manifests
         run: |
           cd LifeLog.AppHost
+          export PATH="$PATH:/home/runner/.dotnet/tools"
           aspirate init -cr ghcr.io -ct latest --disable-secrets true --non-interactive
           aspirate generate --image-pull-policy Always --non-interactive --disable-secrets --include-dashboard true
 
