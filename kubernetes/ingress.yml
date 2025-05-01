@@ -1,0 +1,23 @@
+﻿apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: lifelog
+  name: lifelog-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt
+spec:
+  tls:
+    - hosts:
+        - log.punsvik.net
+      secretName: log-tls
+  rules:
+    - host: log.punsvik.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lifelog
+                port:
+                  name: http
