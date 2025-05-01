@@ -92,6 +92,6 @@ jobs:
         uses: azure/k8s-deploy@v5
         with:
           action: deploy
-          manifests: ./kubernetes
+          manifests: kubernetes
           namespace: lifelog
           images: ghcr.io/punsvikcloud/lifelog:${{ github.sha }}
