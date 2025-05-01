@@ -50,3 +50,35 @@ jobs:
           platforms: linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    runs-on: self-hosted
+    needs: build-and-deploy
+    permissions:
+      id-token: write
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set K8s context
+        uses: azure/k8s-set-context@v4
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.KUBERNETES_URL }}
+          k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
+
+      - name: Set kubectl
+        uses: azure/setup-kubectl@v4
+        id: install
+        with:
+          version: 'v1.29.9'
+
+      - name: Deploy application
+        uses: azure/k8s-deploy@v5
+        with:
+          action: deploy
+          manifests: .kubernetes/
+          namespace: lifelog
+          images: ghcr.io/${{ github.repository }}:${{ github.sha }}
