@@ -10,7 +10,7 @@ jobs:
   build-and-deploy:
     runs-on: self-hosted
     env:
-      DOTNET_ROOT: "/home/runner/.dotnet"
+      DOTNET_INSTALL_DIR: "/home/runner/.dotnet"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
