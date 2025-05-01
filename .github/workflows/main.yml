@@ -79,7 +79,7 @@ jobs:
       - name: Display YAML content
         run: |
           echo "Content of deployment.yml:"
-          cat .kubernetes/deployment.yml
+          cat kubernetes/deployment.yml
 
 #      - name: Display YAML content
 #        run: |
