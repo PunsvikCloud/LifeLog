@@ -78,6 +78,8 @@ jobs:
 
       - name: Display YAML content
         run: |
+          echo "current path:"
+          pwd
           echo "Content of deployment.yml:"
           cat kubernetes/deployment.yml
 
