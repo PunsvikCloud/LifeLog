@@ -43,7 +43,25 @@ app.MapGet("/", () => "OK!");
 
 app.MapGet("/connectionstring", () => builder.Configuration.GetConnectionString("Marten")!);
 
-app.MapGet("/version", () => ThisAssembly.Git.Commit);
+app.MapGet("/version", () => new
+{
+    RepositoryUrl = ThisAssembly.Git.RepositoryUrl,
+    Branch = ThisAssembly.Git.Branch,
+    Commit = ThisAssembly.Git.Commit,
+    Commits = ThisAssembly.Git.Commits,
+    Tag = ThisAssembly.Git.Tag,
+    BaseTag = ThisAssembly.Git.BaseTag,
+    BaseVersionMajor = ThisAssembly.Git.BaseVersion.Major,
+    BaseVersionMinor = ThisAssembly.Git.BaseVersion.Minor,
+    BaseVersionPatch = ThisAssembly.Git.BaseVersion.Patch,
+    SemVerMajor = ThisAssembly.Git.SemVer.Major,
+    SemVerMinor = ThisAssembly.Git.SemVer.Minor,
+    SemVerPatch = ThisAssembly.Git.SemVer.Patch,
+    SemVerLabel = ThisAssembly.Git.SemVer.Label,
+    DashLabel = ThisAssembly.Git.SemVer.DashLabel,
+    Source = ThisAssembly.Git.SemVer.Source,
+    IsDirty = ThisAssembly.Git.IsDirty,
+});
 
 app.MapGet("/weatherforecast", () =>
 {
