@@ -1,12 +1,14 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var api = builder.AddProject<Projects.LifeLog_Api>("api")
-    .WithHttpsHealthCheck("/health");
+var postgres = builder.AddPostgres("postgres")
+    .WithDataVolume(isReadOnly: false);
 
-builder.AddProject<Projects.LifeLog_Web>("webfrontend")
-    .WithExternalHttpEndpoints()
+var postgresdb = postgres.AddDatabase("Marten");
+
+var api = builder.AddProject<Projects.LifeLog_Api>("api")
     .WithHttpsHealthCheck("/health")
-    .WithReference(api)
-    .WaitFor(api);
+    .WithReference(postgresdb)
+    .WaitFor(postgresdb);
+
 
 builder.Build().Run();
