@@ -8,7 +8,6 @@ on:
 
 jobs:
   build-and-deploy:
-    if: false
     runs-on: self-hosted
     permissions:
       contents: read
@@ -54,7 +53,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
-#    needs: build-and-deploy
+    needs: build-and-deploy
     permissions:
       id-token: write
       actions: read
@@ -75,18 +74,6 @@ jobs:
         id: install
         with:
           version: 'v1.29.9'
-
-      - name: Display YAML content
-        run: |
-          echo "current path:"
-          pwd
-          echo "Content of deployment.yml:"
-          cat kubernetes/deployment.yml
-
-#      - name: Display YAML content
-#        run: |
-#          echo "Content of deployment.yml:"
-#          cat /tmp/.kubernetes/deployment.yml
 
       - name: Deploy application
         uses: azure/k8s-deploy@v5
