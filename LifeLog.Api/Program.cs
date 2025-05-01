@@ -1,3 +1,6 @@
+using JasperFx;
+using Marten;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
@@ -8,6 +11,22 @@ builder.Services.AddProblemDetails();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// builder.Services.AddMarten(options =>
+// {
+//     // Establish the connection string to your Marten database
+//     options.Connection(builder.Configuration.GetConnectionString("Marten")!);
+//
+//     // Specify that we want to use STJ as our serializer
+//     options.UseSystemTextJsonForSerialization();
+//
+//     // If we're running in development mode, let Marten just take care
+//     // of all necessary schema building and patching behind the scenes
+//     if (builder.Environment.IsDevelopment())
+//     {
+//         options.AutoCreateSchemaObjects = AutoCreate.All;
+//     }
+// });
 
 var app = builder.Build();
 
@@ -22,6 +41,8 @@ if (app.Environment.IsDevelopment())
 string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 
 app.MapGet("/", () => "OK!");
+
+app.MapGet("/connectionstring", () => builder.Configuration.GetConnectionString("Marten")!);
 
 app.MapGet("/weatherforecast", () =>
 {
