@@ -36,5 +36,5 @@ jobs:
           cd LifeLog.AppHost
           export PATH="$PATH:/home/runner/.dotnet/tools"
           aspirate init -cr ghcr.io -ct latest --disable-secrets true --non-interactive
-          aspirate generate --image-pull-policy Always --non-interactive --disable-secrets --include-dashboard true
+          aspirate generate --image-pull-policy Always --non-interactive --disable-secrets --include-dashboard true --runtime-identifier linux-arm64
 
