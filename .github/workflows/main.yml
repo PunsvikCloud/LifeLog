@@ -8,6 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
+    if: false
     runs-on: self-hosted
     permissions:
       contents: read
@@ -50,12 +51,10 @@ jobs:
           platforms: linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
   deploy:
     runs-on: self-hosted
-    needs: build-and-deploy
+#    needs: build-and-deploy
     permissions:
       id-token: write
       actions: read
@@ -81,6 +80,11 @@ jobs:
         run: |
           echo "Content of deployment.yml:"
           cat .kubernetes/deployment.yml
+
+      - name: Display YAML content
+        run: |
+          echo "Content of deployment.yml:"
+          cat /tmp/.kubernetes/deployment.yml
 
       - name: Deploy application
         uses: azure/k8s-deploy@v5
