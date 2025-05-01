@@ -38,7 +38,7 @@ jobs:
           tags: |
             type=ref,event=branch
             type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value=${{ github.sha | substring(0, 7) }}
+            type=raw,value=${{ github.sha }}
 
       - name: Build and push Docker image
         id: push
@@ -81,4 +81,4 @@ jobs:
           action: deploy
           manifests: .kubernetes/
           namespace: lifelog
-          images: ghcr.io/${{ github.repository | toLowerCase }}:${{ github.sha | substring(0, 7) }}
+          images: ghcr.io/${{ toLowerCase(github.repository) }}:${{ github.sha }}
