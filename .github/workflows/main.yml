@@ -1,4 +1,4 @@
-name: Deploy .NET Aspire to Kubernetes Cluster with GHCR
+name: Build and push to GHCR
 
 on:
   workflow_dispatch:
@@ -9,32 +9,41 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    env:
-      DOTNET_INSTALL_DIR: "/home/runner/.dotnet"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
 
-      - name: Install Aspirate
-        run: dotnet tool install -g aspirate --prerelease
-
-      - name: Docker Login
-        uses: docker/login-action@v3.3.0
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN  }}
           logout: true
 
-      - name: Generate Kubernetes Manifests
-        run: |
-          cd LifeLog.AppHost
-          export PATH="$PATH:/home/runner/.dotnet/tools"
-          aspirate init -cr ghcr.io -ct latest --disable-secrets true --non-interactive
-          aspirate generate --image-pull-policy Always --non-interactive --disable-secrets --include-dashboard true --runtime-identifier linux-arm64
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: kubernetes
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          flavor: latest=true
+          tags: |
+            type=ref,event=branch
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ github.sha }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: {context}/LifeLog.Api/Dockerfile
+          push: true
+          platforms: linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
