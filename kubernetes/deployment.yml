@@ -19,3 +19,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          env:
+            - name: ConnectionStrings__Marten
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: connectionstring
