@@ -81,17 +81,15 @@ jobs:
           echo "Content of deployment.yml:"
           cat .kubernetes/deployment.yml
 
-      - name: Display YAML content
-        run: |
-          echo "Content of deployment.yml:"
-          cat /tmp/.kubernetes/deployment.yml
+#      - name: Display YAML content
+#        run: |
+#          echo "Content of deployment.yml:"
+#          cat /tmp/.kubernetes/deployment.yml
 
       - name: Deploy application
         uses: azure/k8s-deploy@v5
         with:
           action: deploy
-          manifests: |
-            .kubernetes/deployment.yml
+          manifests: kubernetes
           namespace: lifelog
-          images: |
-            ghcr.io/punsvikcloud/lifelog:${{ github.sha }}
+          images: ghcr.io/punsvikcloud/lifelog:${{ github.sha }}
