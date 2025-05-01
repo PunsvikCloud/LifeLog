@@ -1,5 +1,4 @@
-using JasperFx;
-using Marten;
+#pragma warning disable CS0618 // GitInfo SponsorLink
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +42,8 @@ string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "
 app.MapGet("/", () => "OK!");
 
 app.MapGet("/connectionstring", () => builder.Configuration.GetConnectionString("Marten")!);
+
+app.MapGet("/version", () => ThisAssembly.Git.Commit);
 
 app.MapGet("/weatherforecast", () =>
 {
