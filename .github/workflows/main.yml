@@ -81,4 +81,4 @@ jobs:
           action: deploy
           manifests: .kubernetes/
           namespace: lifelog
-          images: ghcr.io/${{ toLowerCase(github.repository) }}:${{ github.sha }}
+          images: ghcr.io/punsvikcloud/lifelog:${{ github.sha }}
