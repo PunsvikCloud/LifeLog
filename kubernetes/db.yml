@@ -29,7 +29,6 @@ spec:
         app: postgres
     spec:
       nodeName: pi1
-      hostNetwork: true
       containers:
         - name: postgres
           image: postgres:13
